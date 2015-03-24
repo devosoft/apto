@@ -36,6 +36,11 @@
 // spaces between defined's parentheses and contained value are required by Visual Studio's preprocessor
 #define APTO_PLATFORM(PROP) (defined( APTO_PLATFORM_ ## PROP ) && APTO_PLATFORM_##PROP)
 
+//Emscripten requires us to disable threadding
+#if defined(__EMSCRIPTEN__)
+  #define DISABLE_THREADS 1
+#endif
+
 #if defined(WIN32) || defined(_WIN32)
 # define APTO_PLATFORM_WINDOWS 1
 # ifdef _MSC_VER
