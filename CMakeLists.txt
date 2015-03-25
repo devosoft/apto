@@ -55,12 +55,13 @@ ADD_SUBDIRECTORY(src)
 
 INSTALL(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include FILES_MATCHING PATTERN "*.h")
 
-
-OPTION(APTO_UNIT_TESTS
-  "Enable the unit-tests executable"
-  ON
-)
-IF(APTO_UNIT_TESTS)
-  ADD_SUBDIRECTORY(utils/unittest/googletest)
-  ADD_SUBDIRECTORY(unittests)
-ENDIF(APTO_UNIT_TESTS)
+IF(NOT EMSCRIPTEN)
+   OPTION(APTO_UNIT_TESTS
+   "Enable the unit-tests executable"
+   ON
+   )
+  IF(APTO_UNIT_TESTS)
+    ADD_SUBDIRECTORY(utils/unittest/googletest)
+    ADD_SUBDIRECTORY(unittests)
+  ENDIF(APTO_UNIT_TESTS)
+ENDIF(NOT EMSCRIPTEN)

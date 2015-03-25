@@ -46,7 +46,25 @@ namespace Apto {
 };
 
 
-#if APTO_PLATFORM(APPLE)
+#if APTO_PLATFORM(EMSCRIPTEN)
+//@MRR Since JS doesn't use threadding, we're going to do non-atomic ops
+inline int Apto::Atomic::Add(volatile int* atomic, int value)
+{
+   (*atomic) += value;
+   return *atomic;
+}
+
+inline int Apto::Atomic::Get(volatile int* atomic)
+{
+   return *atomic;
+}
+
+inline void Apto::Atomic::Set(volatile int* atomic, int value)
+{
+   *atomic = value;
+}
+
+#elif APTO_PLATFORM(APPLE)
 
 #include <libkern/OSAtomic.h>
 
