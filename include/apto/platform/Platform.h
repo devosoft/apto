@@ -36,7 +36,6 @@
 // spaces between defined's parentheses and contained value are required by Visual Studio's preprocessor
 #define APTO_PLATFORM(PROP) (defined( APTO_PLATFORM_ ## PROP ) && APTO_PLATFORM_##PROP)
 
-//Emscripten requires us to disable threadding
 #if defined(__EMSCRIPTEN__)
   #define DISABLE_THREADS 1
 #endif
@@ -60,7 +59,11 @@
 
 #if defined(__APPLE__) || defined(unix) || defined(__unix) || defined(__unix__) || defined (__NetBSD__) || defined(_AIX) || defined(__FreeBSD__)
 # define APTO_PLATFORM_UNIX 1
-# define APTO_PLATFORM_THREADS 1
+# ifdef DISABLE_THREADS
+#   define APTO_PLATFORM_THREADS 0
+# else
+#   define APTO_PLATFORM_THREADS 1
+# endif
 #endif
 
 #if defined(__FreeBSD__)
