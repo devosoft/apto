@@ -48,31 +48,37 @@ LIST(APPEND APTO_CORE_SOURCES ${STAT_SOURCES})
 INCLUDE_DIRECTORIES(../include)
 
 IF (NOT EMSCRIPTEN)
-  OPTION(APTO_LIB_SHARED
-    "Build a dynamic shared library"
+    OPTION(APTO_LIB_SHARED
+      "Build a dynamic shared library"
+      ON
+    )
+    IF(APTO_LIB_SHARED)
+      ADD_LIBRARY(aptoshared SHARED ${APTO_CORE_SOURCES})
+      SET_TARGET_PROPERTIES(aptoshared PROPERTIES OUTPUT_NAME apto COMPILE_FLAGS -DBUILDING_DLL)
+      IF(NOT MSVC)
+        TARGET_LINK_LIBRARIES(aptoshared pthread)
+      ENDIF(NOT MSVC)
+      INSTALL(TARGETS aptoshared DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+      SET(aptoshared_BUILT 1 CACHE INTERNAL "")
+    ENDIF(APTO_LIB_SHARED)
+
+  OPTION(APTO_LIB_STATIC
+    "Build a static library"
     ON
   )
-  IF(APTO_LIB_SHARED)
-    ADD_LIBRARY(aptoshared SHARED ${APTO_CORE_SOURCES})
-    SET_TARGET_PROPERTIES(aptoshared PROPERTIES OUTPUT_NAME apto COMPILE_FLAGS -DBUILDING_DLL)
-    IF(NOT MSVC)
+  IF(APTO_LIB_STATIC)
+    ADD_LIBRARY(aptostatic STATIC ${APTO_CORE_SOURCES})
+    SET_TARGET_PROPERTIES(aptostatic PROPERTIES OUTPUT_NAME apto)
+    IF(NOT MSVC AND NOT EMSCRIPTEN)
       TARGET_LINK_LIBRARIES(aptoshared pthread)
-    ENDIF(NOT MSVC)
-    INSTALL(TARGETS aptoshared DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-    SET(aptoshared_BUILT 1 CACHE INTERNAL "")
-  ENDIF(APTO_LIB_SHARED)
+    ENDIF(NOT MSVC AND NOT EMSCRIPTEN)
+    INSTALL(TARGETS aptostatic DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+    SET(aptostatic_BUILT 1 CACHE INTERNAL "")
+  ENDIF(APTO_LIB_STATIC)
+ELSE(NOT EMSCRIPTEN)
+   # Currently the LLVM-archiver cannot handle files with the same name
+   # when attempting to retrieve object code.  To handle this "feature"
+   # we will create an "object library" to emulate the creation of an
+   # actual library
+   ADD_LIBRARY(apto_objs OBJECT ${APTO_CORE_SOURCES})
 ENDIF(NOT EMSCRIPTEN)
-
-OPTION(APTO_LIB_STATIC
-  "Build a static library"
-  ON
-)
-IF(APTO_LIB_STATIC)
-  ADD_LIBRARY(aptostatic STATIC ${APTO_CORE_SOURCES})
-  SET_TARGET_PROPERTIES(aptostatic PROPERTIES OUTPUT_NAME apto)
-  IF(NOT MSVC AND NOT EMSCRIPTEN)
-    TARGET_LINK_LIBRARIES(aptoshared pthread)
- ENDIF(NOT MSVC AND NOT EMSCRIPTEN)
-  INSTALL(TARGETS aptostatic DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-  SET(aptostatic_BUILT 1 CACHE INTERNAL "")
-ENDIF(APTO_LIB_STATIC)

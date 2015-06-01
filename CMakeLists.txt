@@ -25,6 +25,12 @@ SET(LIBRARY_OUTPUT_PATH
 
 
 IF(UNIX)
+  IF(EMSCRIPTEN)
+    SET(MAX_OPT -O2)
+  ELSE(EMSCRIPTEN)
+    SET(MAX_OPT -O3)
+  ENDIF(EMSCRIPTEN)
+
   SET(CMAKE_CXX_FLAGS_DEBUG
     "-g -DDEBUG"
     CACHE STRING "Flags used by the compiler during debug builds." FORCE)
@@ -32,10 +38,10 @@ IF(UNIX)
     "-Os -DNDEBUG"
     CACHE STRING "Flags used by the compiler during release minsize builds." FORCE)
   SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO
-    "-O3 -g -DDEBUG"
+     "-O${MAX_OPT} -g -DDEBUG"
     CACHE STRING "Flags used by the compiler during release builds." FORCE)
   SET(CMAKE_CXX_FLAGS_RELEASE
-    "-O3 -DNDEBUG"
+     "-O${MAX_OPT} -DNDEBUG"
     CACHE STRING "Flags used by the compiler during release builds." FORCE)
 ENDIF(UNIX)
 
