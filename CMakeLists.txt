@@ -8,7 +8,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 # deciding to enable it.
 CMAKE_POLICY(SET CMP0042 NEW) 
 
-
 INCLUDE(CMakeDependentOption)
 
 # Default location for installed software/configs/ docs is the build directory.
