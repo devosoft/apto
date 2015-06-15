@@ -8,6 +8,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 # deciding to enable it.
 CMAKE_POLICY(SET CMP0042 NEW) 
 
+
+INCLUDE(CMakeDependentOption)
+
 # Default location for installed software/configs/ docs is the build directory.
 SET(CMAKE_INSTALL_PREFIX
   "${PROJECT_BINARY_DIR}"
@@ -67,13 +70,14 @@ ADD_SUBDIRECTORY(src)
 
 INSTALL(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include FILES_MATCHING PATTERN "*.h")
 
-IF(NOT EMSCRIPTEN)
-   OPTION(APTO_UNIT_TESTS
+CMAKE_DEPENDENT_OPTION(APTO_UNIT_TESTS
    "Enable the unit-tests executable"
    ON
+   "EMSCRIPTEN" OFF
    )
-  IF(APTO_UNIT_TESTS)
-    ADD_SUBDIRECTORY(utils/unittest/googletest)
-    ADD_SUBDIRECTORY(unittests)
-  ENDIF(APTO_UNIT_TESTS)
-ENDIF(NOT EMSCRIPTEN)
+
+IF(APTO_UNIT_TESTS)
+   ADD_SUBDIRECTORY(utils/unittest/googletest)
+   ADD_SUBDIRECTORY(unittests)
+ENDIF(APTO_UNIT_TESTS)
+
