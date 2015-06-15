@@ -2,6 +2,12 @@ PROJECT(APTO CXX)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
+# A CMake Policy involving the use of shared libraries on OS X
+# was introduced.  To avoid a warning, we must explicitly state
+# whether or not to use this new feature.  Arbitrarily, I am
+# deciding to enable it.
+CMAKE_POLICY(SET CMP0042 NEW) 
+
 # Default location for installed software/configs/ docs is the build directory.
 SET(CMAKE_INSTALL_PREFIX
   "${PROJECT_BINARY_DIR}"
