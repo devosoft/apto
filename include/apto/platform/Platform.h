@@ -40,7 +40,7 @@
   #define DISABLE_THREADS 1
 #endif
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 # define APTO_PLATFORM_WINDOWS 1
 # ifdef _MSC_VER
 #  define APTO_PLATFORM_MSVC 1
