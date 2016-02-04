@@ -101,7 +101,7 @@ namespace Apto {
     {
       if (!IsDir(path))
         return false;
-      return chdir(path.c_str());
+      return chdir(path);
     }
     
     
