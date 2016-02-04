@@ -48,6 +48,9 @@
 # ifndef mkdir
 #  define mkdir(path, ignored_mode) _mkdir(path)
 # endif
+# ifndef chdir
+#  define chdir(path) _chdir(path)
+# endif
 # ifndef mode_t
 #  define mode_t unsigned int
 # endif
@@ -92,6 +95,16 @@ namespace Apto {
       
       return path;
     }
+    
+    
+    bool ChDir(const String& path)
+    {
+      if (!IsDir(path))
+        return false;
+      return chdir(path.c_str());
+    }
+    
+    
     
     bool IsDir(const String& path)
     {
