@@ -42,9 +42,11 @@ namespace Apto {
     const int MAXIMUM_DIRECTORY_LENGTH = 2048;
     
     LIB_EXPORT String GetCWD();
+    ;
     LIB_EXPORT String GetAbsolutePath(const String& path, const String& working_dir);
     LIB_EXPORT inline String PathAppend(const String& path, const String& path_add);
     
+    LIB_EXPORT bool ChDir(const String& path);
     LIB_EXPORT bool IsDir(const String& path);
     LIB_EXPORT bool IsFile(const String& path);
     
