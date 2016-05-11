@@ -36,7 +36,7 @@
 // spaces between defined's parentheses and contained value are required by Visual Studio's preprocessor
 #define APTO_PLATFORM(PROP) (defined( APTO_PLATFORM_ ## PROP ) && APTO_PLATFORM_##PROP)
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
 # define APTO_PLATFORM_WINDOWS 1
 # ifdef _MSC_VER
 #  define APTO_PLATFORM_MSVC 1
